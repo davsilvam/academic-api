@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  academic:
+    image: bitnami/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRESQL_USERNAME: admin
+      POSTGRESQL_PASSWORD: 123456
+      POSTGRESQL_DATABASE: academic
