@@ -6,10 +6,8 @@
 - [ ] Deve ser possível se autenticar.
 - [ ] Deve ser possível cadastrar seus dados acadêmicos.
 - [ ] Deve ser possível cadastrar suas disciplinas.
-- [ ] Deve ser possível cadastrar suas atividades.
 - [ ] Deve ser possível cadastrar suas notas.
 - [ ] Deve ser possível cadastrar suas faltas.
-- [ ] Deve ser possível cadastrar suas avaliações.
 - [ ] Deve ser possível cadastrar os dados de um professor.
 
 ## RN (Regras de Negócio)
