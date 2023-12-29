@@ -1,6 +1,7 @@
 package com.davsilvam.controllers;
 
 import com.davsilvam.dtos.user.RegisterUserRequest;
+import com.davsilvam.dtos.user.UpdateUserRequest;
 import com.davsilvam.dtos.user.UserResponse;
 import com.davsilvam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class UserController {
     @PostMapping
     public UserResponse create(@RequestBody RegisterUserRequest request) {
         return userService.create(request);
+    }
+
+    @PutMapping("{id}")
+    public UserResponse update(@PathVariable("id") UUID id, @RequestBody UpdateUserRequest request) {
+        return userService.update(id, request);
     }
 }

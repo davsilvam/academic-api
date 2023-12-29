@@ -2,6 +2,7 @@ package com.davsilvam.services;
 
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.user.RegisterUserRequest;
+import com.davsilvam.dtos.user.UpdateUserRequest;
 import com.davsilvam.dtos.user.UserResponse;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
 import com.davsilvam.exceptions.user.UserNotFoundException;
@@ -32,6 +33,22 @@ public class UserService {
         }
 
         user = new User(request.name(), request.email(), request.password());
+        userRepository.save(user);
+
+        return new UserResponse(user.getId(), user.getName(), user.getEmail());
+    }
+
+    public UserResponse update(UUID id, UpdateUserRequest request) throws UserNotFoundException {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+        if (!request.name().isEmpty()) {
+            user.setName(request.name());
+        }
+
+        if (!request.email().isEmpty()) {
+            user.setEmail(request.email());
+        }
+
         userRepository.save(user);
 
         return new UserResponse(user.getId(), user.getName(), user.getEmail());
