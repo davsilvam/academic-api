@@ -21,7 +21,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            return JWT.create().withIssuer("academic").withSubject(user.getEmail()).withExpiresAt(generateExpirationDate()).sign(algorithm);
+            return JWT.create().withIssuer("academic").withSubject(user.getEmail()).withClaim("id", user.getId().toString()).withExpiresAt(generateExpirationDate()).sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token.", exception);
         }
