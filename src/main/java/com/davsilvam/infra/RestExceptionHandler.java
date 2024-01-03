@@ -1,6 +1,8 @@
 package com.davsilvam.infra;
 
 
+import com.davsilvam.exceptions.subjects.SubjectNotFoundException;
+import com.davsilvam.exceptions.subjects.UserUnauthorizedException;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -22,5 +24,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     private ResponseEntity<String> usernameNotFoundHandler(@NotNull UsernameNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @NotNull
+    @ExceptionHandler(SubjectNotFoundException.class)
+    private ResponseEntity<String> subjectNotFoundHandler(@NotNull SubjectNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @NotNull
+    @ExceptionHandler(UserUnauthorizedException.class)
+    private ResponseEntity<String> userUnauthorizedHandler(@NotNull UserUnauthorizedException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
     }
 }
