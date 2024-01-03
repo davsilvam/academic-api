@@ -4,9 +4,8 @@ import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
 import com.davsilvam.dtos.subject.CreateSubjectResponse;
 import com.davsilvam.dtos.subject.GetSubjectResponse;
-import com.davsilvam.infra.security.TokenService;
 import com.davsilvam.services.SubjectService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,12 +18,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/subjects")
+@RequiredArgsConstructor
 public class SubjectController {
-    @Autowired
-    private SubjectService subjectService;
-
-    @Autowired
-    private TokenService tokenService;
+    private final SubjectService subjectService;
 
     @GetMapping("{id}")
     public ResponseEntity<GetSubjectResponse> get(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {

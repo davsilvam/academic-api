@@ -5,7 +5,7 @@ import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +13,10 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class SubjectService {
-    @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final SubjectRepository subjectRepository;
+    private final UserRepository userRepository;
 
     public Subject get(UUID id, UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
