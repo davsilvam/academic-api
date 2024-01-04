@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@DisplayName("Subject Service Tests")
 class SubjectServiceTest {
     @Mock
     private SubjectRepository subjectRepository;
