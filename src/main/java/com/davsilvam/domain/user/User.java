@@ -39,6 +39,13 @@ public class User implements UserDetails {
         this.passwordHash = password;
     }
 
+    public User(UUID id, String name, String email, String passwordHash) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

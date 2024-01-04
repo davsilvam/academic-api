@@ -24,8 +24,6 @@ public class AuthorizationService implements UserDetailsService {
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
-    private AuthenticationManager authenticationManager;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository.findByEmail(username);
@@ -43,11 +41,11 @@ public class AuthorizationService implements UserDetailsService {
     }
 
     public String login(String email, String password) {
-        authenticationManager = this.applicationContext.getBean(AuthenticationManager.class);
+        AuthenticationManager authenticationManager = this.applicationContext.getBean(AuthenticationManager.class);
 
         try {
             UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(email, password);
-            Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+            Authentication auth = authenticationManager.authenticate(usernamePassword);
 
             return this.tokenService.generateToken((User) auth.getPrincipal());
         } catch (AuthenticationException exception) {
