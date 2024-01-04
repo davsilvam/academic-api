@@ -1,6 +1,8 @@
 package com.davsilvam.services;
 
 import com.davsilvam.domain.user.User;
+import com.davsilvam.dtos.authentication.LoginRequest;
+import com.davsilvam.dtos.authentication.RegisterRequest;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
 import com.davsilvam.infra.security.TokenService;
 import com.davsilvam.repositories.UserRepository;
@@ -29,22 +31,22 @@ public class AuthorizationService implements UserDetailsService {
         return this.userRepository.findByEmail(username);
     }
 
-    public User register(String name, String email, String password) throws EmailAlreadyUsedException {
-        if (userRepository.findByEmail(email) != null) {
+    public User register(RegisterRequest request) throws EmailAlreadyUsedException {
+        if (userRepository.findByEmail(request.email()) != null) {
             throw new EmailAlreadyUsedException("Email already used!");
         }
 
-        String encryptedPassword = this.passwordEncoder.encode(password);
-        User user = new User(name, email, encryptedPassword);
+        String encryptedPassword = this.passwordEncoder.encode(request.password());
+        User user = new User(request.name(), request.email(), encryptedPassword);
 
         return this.userRepository.save(user);
     }
 
-    public String login(String email, String password) {
+    public String login(LoginRequest request) {
         AuthenticationManager authenticationManager = this.applicationContext.getBean(AuthenticationManager.class);
 
         try {
-            UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(email, password);
+            UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.email(), request.password());
             Authentication auth = authenticationManager.authenticate(usernamePassword);
 
             return this.tokenService.generateToken((User) auth.getPrincipal());

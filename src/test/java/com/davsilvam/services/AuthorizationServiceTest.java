@@ -68,7 +68,7 @@ class AuthorizationServiceTest {
         when(passwordEncoder.encode(request.password())).thenReturn("encryptedPassword");
         when(userRepository.save(any(User.class))).thenReturn(mockUser);
 
-        User result = authorizationService.register(request.name(), request.email(), request.password());
+        User result = authorizationService.register(request);
 
         assertNotNull(result);
         assertEquals(mockUser.getPasswordHash(), result.getPasswordHash());
@@ -85,7 +85,7 @@ class AuthorizationServiceTest {
 
         when(userRepository.findByEmail(request.email())).thenReturn(mockUser);
 
-        assertThrows(EmailAlreadyUsedException.class, () -> authorizationService.register(request.name(), request.email(), request.password()));
+        assertThrows(EmailAlreadyUsedException.class, () -> authorizationService.register(request));
         verify(userRepository).findByEmail(request.email());
     }
 
@@ -97,7 +97,7 @@ class AuthorizationServiceTest {
         when(applicationContext.getBean(AuthenticationManager.class)).thenReturn(authentication -> new UsernamePasswordAuthenticationToken(mockUser, null));
         when(tokenService.generateToken(mockUser)).thenReturn("token");
 
-        String result = authorizationService.login(request.email(), request.password());
+        String result = authorizationService.login(request);
 
         assertNotNull(result);
         assertEquals("token", result);
@@ -114,7 +114,7 @@ class AuthorizationServiceTest {
             throw new UsernameNotFoundException("Invalid credentials.");
         });
 
-        assertThrows(UsernameNotFoundException.class, () -> authorizationService.login(request.email(), request.password()));
+        assertThrows(UsernameNotFoundException.class, () -> authorizationService.login(request));
         verify(applicationContext).getBean(AuthenticationManager.class);
     }
 }

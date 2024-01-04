@@ -23,7 +23,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@NotNull @RequestBody RegisterRequest request) {
-        User user = this.authorizationService.register(request.name(), request.email(), request.password());
+        User user = this.authorizationService.register(request);
         RegisterResponse response = new RegisterResponse(user.getId(), user.getName(), user.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -31,7 +31,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@NotNull @RequestBody LoginRequest request) {
-        String token = this.authorizationService.login(request.email(), request.password());
+        String token = this.authorizationService.login(request);
         LoginResponse response = new LoginResponse(token);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
