@@ -1,11 +1,14 @@
 package com.davsilvam.services;
 
+import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
+import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
-import com.davsilvam.exceptions.subjects.SubjectNotFoundException;
-import com.davsilvam.exceptions.subjects.UserUnauthorizedException;
+import com.davsilvam.exceptions.subject.SubjectNotFoundException;
+import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.repositories.ProfessorRepository;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,6 +24,7 @@ import java.util.UUID;
 public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final UserRepository userRepository;
+    private final ProfessorRepository professorRepository;
 
     public Subject get(UUID id, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
@@ -38,7 +42,7 @@ public class SubjectService {
         return subject;
     }
 
-    public Set<Subject> fetch(@NotNull UserDetails userDetails) {
+    public List<Subject> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         return this.subjectRepository.findAllByUserId(user.getId());
@@ -46,7 +50,10 @@ public class SubjectService {
 
     public Subject create(@NotNull CreateSubjectRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        Subject subject = new Subject(request.name(), request.description(), user);
+        List<Professor> professors = this.professorRepository.findAllById(request.professorsIds());
+
+        Subject subject = new Subject(request.name(), request.description(), user, professors);
+        professors.forEach(professor -> professor.addSubject(subject));
 
         return this.subjectRepository.save(subject);
     }
@@ -69,6 +76,31 @@ public class SubjectService {
         return this.subjectRepository.save(subject);
     }
 
+    public Subject updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+        User user = this.userRepository.findByEmail(userDetails.getUsername());
+        Subject subject = this.subjectRepository.findById(id).orElse(null);
+
+        if (subject == null) {
+            throw new SubjectNotFoundException("Subject not found.");
+        }
+
+        if (!subject.getUser().getId().equals(user.getId())) {
+            throw new UserUnauthorizedException("User not allowed to access this subject.");
+        }
+
+        List<Professor> subjectProfessors = subject.getProfessors();
+
+        if (subjectProfessors != null) {
+            subjectProfessors.forEach(professor -> professor.removeSubject(subject));
+        }
+
+        List<Professor> professors = this.professorRepository.findAllById(request.professors_ids());
+        subject.setProfessors(professors);
+        professors.forEach(professor -> professor.addSubject(subject));
+
+        return this.subjectRepository.save(subject);
+    }
+
     public void delete(UUID id, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElse(null);
@@ -80,6 +112,11 @@ public class SubjectService {
         if (!subject.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
         }
+
+        subject.getProfessors().forEach(professor -> {
+            professor.removeSubject(subject);
+            this.professorRepository.save(professor);
+        });
 
         this.subjectRepository.delete(subject);
     }

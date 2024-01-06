@@ -1,4 +1,4 @@
-package com.davsilvam.exceptions.subjects;
+package com.davsilvam.exceptions.subject;
 
 public class SubjectNotFoundException extends RuntimeException {
     public SubjectNotFoundException() {

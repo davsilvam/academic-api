@@ -4,8 +4,8 @@ import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
-import com.davsilvam.exceptions.subjects.SubjectNotFoundException;
-import com.davsilvam.exceptions.subjects.UserUnauthorizedException;
+import com.davsilvam.exceptions.subject.SubjectNotFoundException;
+import com.davsilvam.exceptions.user.UserUnauthorizedException;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -156,7 +156,7 @@ class SubjectServiceTest {
 
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
 
-        CreateSubjectRequest mockRequest = new CreateSubjectRequest("Subject 1", "Description 1");
+        CreateSubjectRequest mockRequest = new CreateSubjectRequest("Subject 1", "Description 1", new ArrayList<>());
 
         Subject result = subjectService.create(mockRequest, userDetails);
 
@@ -173,7 +173,7 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         UUID subjectId = UUID.randomUUID();
-        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser);
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
@@ -196,7 +196,7 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         UUID subjectId = UUID.randomUUID();
-        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser);
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
@@ -219,7 +219,7 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         UUID subjectId = UUID.randomUUID();
-        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser);
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
@@ -261,7 +261,7 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(unauthorizedMockUser.getEmail())).thenReturn(unauthorizedMockUser);
 
         UUID subjectId = UUID.randomUUID();
-        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser);
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
 
@@ -280,7 +280,7 @@ class SubjectServiceTest {
 
         UUID subjectId = UUID.randomUUID();
 
-        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser);
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
 
         subjectService.delete(subjectId, userDetails);
@@ -312,7 +312,7 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(unauthorizedMockUser.getEmail())).thenReturn(unauthorizedMockUser);
 
         UUID subjectId = UUID.randomUUID();
-        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser);
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
 

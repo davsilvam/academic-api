@@ -1,4 +1,4 @@
-package com.davsilvam.exceptions.subjects;
+package com.davsilvam.exceptions.user;
 
 public class UserUnauthorizedException extends RuntimeException {
     public UserUnauthorizedException() {

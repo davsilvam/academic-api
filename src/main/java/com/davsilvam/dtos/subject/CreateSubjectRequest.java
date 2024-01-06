@@ -1,4 +1,7 @@
 package com.davsilvam.dtos.subject;
 
-public record CreateSubjectRequest(String name, String description) {
+import java.util.List;
+import java.util.UUID;
+
+public record CreateSubjectRequest(String name, String description, List<UUID> professorsIds) {
 }

@@ -1,13 +1,18 @@
 package com.davsilvam.domain.user;
 
+import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.subject.Subject;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -16,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@JsonIgnoreProperties({"passwordHash", "authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled", "password", "username"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,9 +34,13 @@ public class User implements UserDetails {
 
     private String passwordHash;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private Set<Subject> subjects;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private List<Subject> subjects;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private List<Professor> professors;
 
     public User(String name, String email, String password) {
         this.name = name;

@@ -3,11 +3,13 @@ spring:
     username: admin
     password: 123456
     url: jdbc:postgresql://localhost:5432/academic
+    driver-class-name: org.postgresql.Driver
   sql:
     init:
       mode: always
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
+      generate-ddl: true
       hibernate:
         ddl-auto: update
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
