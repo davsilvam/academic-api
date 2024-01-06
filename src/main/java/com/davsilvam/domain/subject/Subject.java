@@ -43,13 +43,6 @@ public class Subject {
         this.user = user;
     }
 
-    public Subject(String name, String description, User user, List<Professor> professors) {
-        this.name = name;
-        this.description = description;
-        this.user = user;
-        this.professors = professors;
-    }
-
     public void removeProfessor(Professor professor) {
         this.professors.remove(professor);
     }

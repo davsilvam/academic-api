@@ -50,10 +50,14 @@ public class SubjectService {
 
     public Subject create(@NotNull CreateSubjectRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        List<Professor> professors = this.professorRepository.findAllById(request.professorsIds());
+        List<Professor> professors = this.professorRepository.findAllById(request.professors_ids());
 
-        Subject subject = new Subject(request.name(), request.description(), user, professors);
-        professors.forEach(professor -> professor.addSubject(subject));
+        Subject subject = new Subject(request.name(), request.description(), user);
+        subject.setProfessors(professors);
+
+        if (!professors.isEmpty()) {
+            professors.forEach(professor -> professor.addSubject(subject));
+        }
 
         return this.subjectRepository.save(subject);
     }

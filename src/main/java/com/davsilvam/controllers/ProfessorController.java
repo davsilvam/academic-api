@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -32,7 +31,7 @@ public class ProfessorController {
 
     @GetMapping
     public ResponseEntity<List<ProfessorResponse>> fetch(@AuthenticationPrincipal UserDetails userDetails) {
-        Set<Professor> professors = this.professorService.fetch(userDetails);
+        List<Professor> professors = this.professorService.fetch(userDetails);
         List<ProfessorResponse> response = professors.stream().map(ProfessorResponse::new).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

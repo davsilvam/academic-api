@@ -9,7 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "professors")
@@ -34,12 +35,13 @@ public class Professor {
 
     @ManyToMany(mappedBy = "professors")
     @JsonIgnoreProperties({"professors", "user"})
-    private Set<Subject> subjects;
+    private List<Subject> subjects;
 
     public Professor(String name, String email, User user) {
         this.name = name;
         this.email = email;
         this.user = user;
+        this.subjects = new ArrayList<>();
     }
 
     public void addSubject(Subject subject) {

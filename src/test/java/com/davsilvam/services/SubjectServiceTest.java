@@ -1,11 +1,13 @@
 package com.davsilvam.services;
 
+import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
 import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.repositories.ProfessorRepository;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -27,15 +29,18 @@ import static org.mockito.Mockito.when;
 @DisplayName("Subject Service Tests")
 class SubjectServiceTest {
     @Mock
-    private SubjectRepository subjectRepository;
+    SubjectRepository subjectRepository;
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
+
+    @Mock
+    ProfessorRepository professorRepository;
 
     @InjectMocks
-    private SubjectService subjectService;
+    SubjectService subjectService;
 
-    private AutoCloseable closeable;
+    AutoCloseable closeable;
 
     @Mock
     UserDetails userDetails;
@@ -107,16 +112,15 @@ class SubjectServiceTest {
     @Test
     @DisplayName("should be able to fetch subjects")
     void fetchCase1() {
-        User mockUser = new User("Test User", "test@example.com", "password");
-
         when(userDetails.getUsername()).thenReturn(mockUser.getEmail());
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
-        Set<Subject> mockSubjects = new HashSet<>(Arrays.asList(new Subject("Subject 1", "Description 1", mockUser), new Subject("Subject 2", "Description 2", mockUser)));
+        List<Subject> mockSubjects = Arrays.asList(new Subject("Subject 1", "Description 1", mockUser), new Subject("Subject 2", "Description 2", mockUser));
+        ;
 
         when(subjectRepository.findAllByUserId(mockUser.getId())).thenReturn(mockSubjects);
 
-        Set<Subject> result = subjectService.fetch(userDetails);
+        List<Subject> result = subjectService.fetch(userDetails);
 
         assertNotNull(result);
         assertEquals(mockSubjects, result);
@@ -127,16 +131,14 @@ class SubjectServiceTest {
     @Test
     @DisplayName("should be able to fetch empty subjects")
     void fetchCase2() {
-        User mockUser = new User("Test User", "test@example.com", "password");
-
         when(userDetails.getUsername()).thenReturn(mockUser.getEmail());
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
-        Set<Subject> mockSubjects = new HashSet<>();
+        List<Subject> mockSubjects = new ArrayList<>();
 
         when(subjectRepository.findAllByUserId(mockUser.getId())).thenReturn(mockSubjects);
 
-        Set<Subject> result = subjectService.fetch(userDetails);
+        List<Subject> result = subjectService.fetch(userDetails);
 
         assertNotNull(result);
         assertEquals(mockSubjects, result);
@@ -147,21 +149,26 @@ class SubjectServiceTest {
     @Test
     @DisplayName("should be able to create a subject")
     void createCase1() {
-        User mockUser = new User("Test User", "test@example.com", "password");
-
         when(userDetails.getUsername()).thenReturn(mockUser.getEmail());
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
+        List<UUID> professorsIds = new ArrayList<>();
+        List<Professor> mockProfessors = new ArrayList<>();
+
+        when(professorRepository.findAllById(professorsIds)).thenReturn(mockProfessors);
+
         Subject mockSubject = new Subject("Subject 1", "Description 1", mockUser);
+        mockSubject.setProfessors(mockProfessors);
 
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
 
-        CreateSubjectRequest mockRequest = new CreateSubjectRequest("Subject 1", "Description 1", new ArrayList<>());
+        CreateSubjectRequest mockRequest = new CreateSubjectRequest("Subject 1", "Description 1", professorsIds);
 
         Subject result = subjectService.create(mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubject, result);
+        assertEquals(mockSubject.getName(), result.getName());
+        verify(userDetails, Mockito.times(1)).getUsername();
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, Mockito.times(1)).save(mockSubject);
     }

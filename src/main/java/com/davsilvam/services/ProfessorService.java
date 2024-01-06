@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class ProfessorService {
         return professor;
     }
 
-    public Set<Professor> fetch(@NotNull UserDetails userDetails) {
+    public List<Professor> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         return this.professorRepository.findAllByUserId(user.getId());
