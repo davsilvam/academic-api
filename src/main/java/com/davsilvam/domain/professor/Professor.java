@@ -44,6 +44,14 @@ public class Professor {
         this.subjects = new ArrayList<>();
     }
 
+    public Professor(UUID id, String name, String email, User user) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.user = user;
+        this.subjects = new ArrayList<>();
+    }
+
     public void addSubject(Subject subject) {
         this.subjects.add(subject);
     }
