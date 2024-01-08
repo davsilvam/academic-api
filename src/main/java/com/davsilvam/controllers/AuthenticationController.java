@@ -1,6 +1,5 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.authentication.LoginRequest;
 import com.davsilvam.dtos.authentication.LoginResponse;
 import com.davsilvam.dtos.authentication.RegisterRequest;
@@ -23,16 +22,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@NotNull @RequestBody RegisterRequest request) {
-        User user = this.authorizationService.register(request);
-        RegisterResponse response = new RegisterResponse(user.getId(), user.getName(), user.getEmail());
-
+        RegisterResponse response = this.authorizationService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@NotNull @RequestBody LoginRequest request) {
-        String token = this.authorizationService.login(request);
-        LoginResponse response = new LoginResponse(token);
+        LoginResponse response = this.authorizationService.login(request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -4,6 +4,7 @@ import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
+import com.davsilvam.dtos.subject.SubjectResponse;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
 import com.davsilvam.exceptions.user.UserUnauthorizedException;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,13 +68,14 @@ class SubjectServiceTest {
 
         UUID subjectId = UUID.randomUUID();
         Subject mockSubject = new Subject("Test Subject", "Description", mockUser);
+        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
 
-        Subject result = subjectService.get(subjectId, userDetails);
+        SubjectResponse result = subjectService.get(subjectId, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubject, result);
+        assertEquals(mockResponse, result);
         verify(subjectRepository, Mockito.times(1)).findById(subjectId);
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
     }
@@ -117,13 +120,14 @@ class SubjectServiceTest {
 
         List<Subject> mockSubjects = Arrays.asList(new Subject("Subject 1", "Description 1", mockUser), new Subject("Subject 2", "Description 2", mockUser));
         ;
+        List<SubjectResponse> mockResponses = Arrays.asList(new SubjectResponse(mockSubjects.get(0)), new SubjectResponse(mockSubjects.get(1)));
 
         when(subjectRepository.findAllByUserId(mockUser.getId())).thenReturn(mockSubjects);
 
-        List<Subject> result = subjectService.fetch(userDetails);
+        List<SubjectResponse> result = subjectService.fetch(userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubjects, result);
+        assertEquals(mockResponses, result);
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, Mockito.times(1)).findAllByUserId(mockUser.getId());
     }
@@ -135,13 +139,14 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         List<Subject> mockSubjects = new ArrayList<>();
+        List<SubjectResponse> mockResponses = new ArrayList<>();
 
         when(subjectRepository.findAllByUserId(mockUser.getId())).thenReturn(mockSubjects);
 
-        List<Subject> result = subjectService.fetch(userDetails);
+        List<SubjectResponse> result = subjectService.fetch(userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubjects, result);
+        assertEquals(mockResponses, result);
         verify(subjectRepository, Mockito.times(1)).findAllByUserId(mockUser.getId());
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
     }
@@ -159,18 +164,19 @@ class SubjectServiceTest {
 
         Subject mockSubject = new Subject("Subject 1", "Description 1", mockUser);
         mockSubject.setProfessors(mockProfessors);
+        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
-        when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
+        when(subjectRepository.save(any(Subject.class))).thenReturn(mockSubject);
 
         CreateSubjectRequest mockRequest = new CreateSubjectRequest("Subject 1", "Description 1", professorsIds);
 
-        Subject result = subjectService.create(mockRequest, userDetails);
+        SubjectResponse result = subjectService.create(mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubject.getName(), result.getName());
+        assertEquals(mockResponse, result);
         verify(userDetails, Mockito.times(1)).getUsername();
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
-        verify(subjectRepository, Mockito.times(1)).save(mockSubject);
+        verify(subjectRepository, Mockito.times(1)).save(any(Subject.class));
     }
 
     @Test
@@ -181,16 +187,17 @@ class SubjectServiceTest {
 
         UUID subjectId = UUID.randomUUID();
         Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
+        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
 
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.of("New Subject Name"), Optional.of("New Subject Description"));
 
-        Subject result = subjectService.update(subjectId, mockRequest, userDetails);
+        SubjectResponse result = subjectService.update(subjectId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubject, result);
+        assertEquals(mockResponse, result);
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, Mockito.times(1)).findById(subjectId);
         verify(subjectRepository, Mockito.times(1)).save(mockSubject);
@@ -204,16 +211,17 @@ class SubjectServiceTest {
 
         UUID subjectId = UUID.randomUUID();
         Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
+        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
 
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.of("New Subject Name"), Optional.empty());
 
-        Subject result = subjectService.update(subjectId, mockRequest, userDetails);
+        SubjectResponse result = subjectService.update(subjectId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubject, result);
+        assertEquals(mockResponse, result);
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, Mockito.times(1)).findById(subjectId);
         verify(subjectRepository, Mockito.times(1)).save(mockSubject);
@@ -227,16 +235,17 @@ class SubjectServiceTest {
 
         UUID subjectId = UUID.randomUUID();
         Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
+        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
         when(subjectRepository.save(mockSubject)).thenReturn(mockSubject);
 
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.empty(), Optional.of("New Subject Description"));
 
-        Subject result = subjectService.update(subjectId, mockRequest, userDetails);
+        SubjectResponse result = subjectService.update(subjectId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockSubject, result);
+        assertEquals(mockResponse, result);
         verify(userRepository, Mockito.times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, Mockito.times(1)).findById(subjectId);
         verify(subjectRepository, Mockito.times(1)).save(mockSubject);

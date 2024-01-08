@@ -4,6 +4,7 @@ import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
+import com.davsilvam.dtos.subject.SubjectResponse;
 import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
@@ -26,7 +27,7 @@ public class SubjectService {
     private final UserRepository userRepository;
     private final ProfessorRepository professorRepository;
 
-    public Subject get(UUID id, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
+    public SubjectResponse get(UUID id, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Subject subject = this.subjectRepository.findById(id).orElse(null);
@@ -39,16 +40,16 @@ public class SubjectService {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
         }
 
-        return subject;
+        return new SubjectResponse(subject);
     }
 
-    public List<Subject> fetch(@NotNull UserDetails userDetails) {
+    public List<SubjectResponse> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
-        return this.subjectRepository.findAllByUserId(user.getId());
+        return this.subjectRepository.findAllByUserId(user.getId()).stream().map(SubjectResponse::new).toList();
     }
 
-    public Subject create(@NotNull CreateSubjectRequest request, @NotNull UserDetails userDetails) {
+    public SubjectResponse create(@NotNull CreateSubjectRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         List<Professor> professors = this.professorRepository.findAllById(request.professors_ids());
 
@@ -59,10 +60,12 @@ public class SubjectService {
             professors.forEach(professor -> professor.addSubject(subject));
         }
 
-        return this.subjectRepository.save(subject);
+        Subject createdSubject = this.subjectRepository.save(subject);
+
+        return new SubjectResponse(createdSubject);
     }
 
-    public Subject update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public SubjectResponse update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElse(null);
 
@@ -77,10 +80,10 @@ public class SubjectService {
         subject.setName(request.name().orElse(subject.getName()));
         subject.setDescription(request.description().orElse(subject.getDescription()));
 
-        return this.subjectRepository.save(subject);
+        return new SubjectResponse(this.subjectRepository.save(subject));
     }
 
-    public Subject updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public SubjectResponse updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElse(null);
 
@@ -102,7 +105,7 @@ public class SubjectService {
         subject.setProfessors(professors);
         professors.forEach(professor -> professor.addSubject(subject));
 
-        return this.subjectRepository.save(subject);
+        return new SubjectResponse(this.subjectRepository.save(subject));
     }
 
     public void delete(UUID id, @NotNull UserDetails userDetails) throws UserUnauthorizedException {

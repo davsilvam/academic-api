@@ -1,6 +1,5 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.subject.Subject;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
 import com.davsilvam.dtos.subject.SubjectResponse;
 import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
@@ -24,48 +23,37 @@ public class SubjectController {
 
     @GetMapping("{id}")
     public ResponseEntity<SubjectResponse> get(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        Subject subject = this.subjectService.get(id, userDetails);
-        SubjectResponse response = new SubjectResponse(subject);
-
+        SubjectResponse response = this.subjectService.get(id, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<SubjectResponse>> fetch(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Subject> subjects = this.subjectService.fetch(userDetails);
-        List<SubjectResponse> response = subjects.stream().map(SubjectResponse::new).toList();
-
+        List<SubjectResponse> response = this.subjectService.fetch(userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
     public ResponseEntity<SubjectResponse> create(@RequestBody CreateSubjectRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        Subject createdSubject = this.subjectService.create(request, userDetails);
-        SubjectResponse response = new SubjectResponse(createdSubject);
-
+        SubjectResponse response = this.subjectService.create(request, userDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<SubjectResponse> update(@PathVariable("id") UUID id, @RequestBody UpdateSubjectRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        Subject updatedSubject = this.subjectService.update(id, request, userDetails);
-        SubjectResponse response = new SubjectResponse(updatedSubject);
-
+        SubjectResponse response = this.subjectService.update(id, request, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("{id}/professors")
     public ResponseEntity<SubjectResponse> updateProfessors(@PathVariable("id") UUID id, @RequestBody UpdateSubjectProfessorsRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        Subject updatedSubject = this.subjectService.updateProfessors(id, request, userDetails);
-        SubjectResponse response = new SubjectResponse(updatedSubject);
-
+        SubjectResponse response = this.subjectService.updateProfessors(id, request, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {
         this.subjectService.delete(id, userDetails);
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -2,7 +2,9 @@ package com.davsilvam.services;
 
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.authentication.LoginRequest;
+import com.davsilvam.dtos.authentication.LoginResponse;
 import com.davsilvam.dtos.authentication.RegisterRequest;
+import com.davsilvam.dtos.authentication.RegisterResponse;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
 import com.davsilvam.infra.security.TokenService;
 import com.davsilvam.repositories.UserRepository;
@@ -61,18 +63,17 @@ class AuthorizationServiceTest {
     @Test
     @DisplayName("should be able to register a new user")
     void registerCase1() {
-        mockUser.setPasswordHash("encryptedPassword");
         RegisterRequest request = new RegisterRequest("Test User", "test@example.com", "password");
+        RegisterResponse mockResponse = new RegisterResponse(mockUser.getId(), mockUser.getName(), mockUser.getEmail());
 
         when(userRepository.findByEmail(request.email())).thenReturn(null);
         when(passwordEncoder.encode(request.password())).thenReturn("encryptedPassword");
         when(userRepository.save(any(User.class))).thenReturn(mockUser);
 
-        User result = authorizationService.register(request);
+        RegisterResponse result = authorizationService.register(request);
 
         assertNotNull(result);
-        assertEquals(mockUser.getPasswordHash(), result.getPasswordHash());
-        assertEquals(mockUser, result);
+        assertEquals(mockResponse, result);
         verify(userRepository).findByEmail(request.email());
         verify(passwordEncoder).encode(request.password());
         verify(userRepository).save(any(User.class));
@@ -93,14 +94,15 @@ class AuthorizationServiceTest {
     @DisplayName("should be able to login with valid credentials")
     void loginCase1() {
         LoginRequest request = new LoginRequest("test@example.com", "password");
+        LoginResponse mockResponse = new LoginResponse("token");
 
         when(applicationContext.getBean(AuthenticationManager.class)).thenReturn(authentication -> new UsernamePasswordAuthenticationToken(mockUser, null));
         when(tokenService.generateToken(mockUser)).thenReturn("token");
 
-        String result = authorizationService.login(request);
+        LoginResponse result = authorizationService.login(request);
 
         assertNotNull(result);
-        assertEquals("token", result);
+        assertEquals(mockResponse, result);
         verify(applicationContext).getBean(AuthenticationManager.class);
         verify(tokenService).generateToken(mockUser);
     }

@@ -1,6 +1,5 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.dtos.professor.CreateProfessorRequest;
 import com.davsilvam.dtos.professor.ProfessorResponse;
 import com.davsilvam.dtos.professor.UpdateProfessorRequest;
@@ -23,40 +22,31 @@ public class ProfessorController {
 
     @GetMapping("{id}")
     public ResponseEntity<ProfessorResponse> get(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        Professor professor = this.professorService.get(id, userDetails);
-        ProfessorResponse response = new ProfessorResponse(professor);
-
+        ProfessorResponse response = this.professorService.get(id, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ProfessorResponse>> fetch(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Professor> professors = this.professorService.fetch(userDetails);
-        List<ProfessorResponse> response = professors.stream().map(ProfessorResponse::new).toList();
-
+        List<ProfessorResponse> response = this.professorService.fetch(userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
     public ResponseEntity<ProfessorResponse> create(@RequestBody CreateProfessorRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        Professor createdProfessor = this.professorService.create(request, userDetails);
-        ProfessorResponse response = new ProfessorResponse(createdProfessor);
-
+        ProfessorResponse response = this.professorService.create(request, userDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<ProfessorResponse> update(@PathVariable("id") UUID id, @RequestBody UpdateProfessorRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        Professor updatedProfessor = this.professorService.update(id, request, userDetails);
-        ProfessorResponse response = new ProfessorResponse(updatedProfessor);
-
+        ProfessorResponse response = this.professorService.update(id, request, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {
         this.professorService.delete(id, userDetails);
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

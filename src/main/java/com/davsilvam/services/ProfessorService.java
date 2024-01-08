@@ -3,6 +3,7 @@ package com.davsilvam.services;
 import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.user.User;
 import com.davsilvam.dtos.professor.CreateProfessorRequest;
+import com.davsilvam.dtos.professor.ProfessorResponse;
 import com.davsilvam.dtos.professor.UpdateProfessorRequest;
 import com.davsilvam.exceptions.professor.ProfessorNotFoundException;
 import com.davsilvam.exceptions.user.UserUnauthorizedException;
@@ -15,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -25,7 +25,7 @@ public class ProfessorService {
     private final UserRepository userRepository;
     private final SubjectRepository subjectRepository;
 
-    public Professor get(UUID id, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
+    public ProfessorResponse get(UUID id, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Professor professor = this.professorRepository.findById(id).orElse(null);
@@ -38,23 +38,25 @@ public class ProfessorService {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
         }
 
-        return professor;
+        return new ProfessorResponse(professor);
     }
 
-    public List<Professor> fetch(@NotNull UserDetails userDetails) {
+    public List<ProfessorResponse> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
-        return this.professorRepository.findAllByUserId(user.getId());
+        return this.professorRepository.findAllByUserId(user.getId()).stream().map(ProfessorResponse::new).toList();
     }
 
-    public Professor create(@NotNull CreateProfessorRequest request, @NotNull UserDetails userDetails) {
+    public ProfessorResponse create(@NotNull CreateProfessorRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Professor professor = new Professor(request.name(), request.email(), user);
 
-        return this.professorRepository.save(professor);
+        Professor createdProfessor = this.professorRepository.save(professor);
+
+        return new ProfessorResponse(createdProfessor);
     }
 
-    public Professor update(UUID id, @NotNull UpdateProfessorRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public ProfessorResponse update(UUID id, @NotNull UpdateProfessorRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Professor professor = this.professorRepository.findById(id).orElse(null);
 
@@ -69,7 +71,7 @@ public class ProfessorService {
         professor.setName(request.name().orElse(professor.getName()));
         professor.setEmail(request.email().orElse(professor.getEmail()));
 
-        return this.professorRepository.save(professor);
+        return new ProfessorResponse(this.professorRepository.save(professor));
     }
 
     public void delete(UUID id, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
