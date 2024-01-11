@@ -1,5 +1,6 @@
 package com.davsilvam.domain.subject;
 
+import com.davsilvam.domain.grades.Grade;
 import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,6 +37,10 @@ public class Subject {
     @JoinTable(name = "subjects_professors", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "professor_id"))
     @JsonIgnoreProperties({"user", "subjects"})
     private List<Professor> professors;
+
+    @OneToMany(mappedBy = "subject")
+    @JsonIgnoreProperties("subject")
+    private List<Grade> grades;
 
     public Subject(String name, String description, User user) {
         this.name = name;

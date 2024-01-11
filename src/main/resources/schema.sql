@@ -28,3 +28,11 @@ CREATE TABLE IF NOT EXISTS subjects_professors (
     FOREIGN KEY (subject_id) REFERENCES subjects (id),
     FOREIGN KEY (professor_id) REFERENCES professors (id)
 );
+
+CREATE TABLE IF NOT EXISTS grades (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    value DOUBLE PRECISION NOT NULL,
+    subject_id UUID NOT NULL,
+    FOREIGN KEY (subject_id) REFERENCES subjects (id)
+);
