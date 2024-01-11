@@ -30,11 +30,7 @@ public class SubjectService {
     public SubjectResponse get(UUID id, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
-        Subject subject = this.subjectRepository.findById(id).orElse(null);
-
-        if (subject == null) {
-            throw new SubjectNotFoundException("Subject not found.");
-        }
+        Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
         if (!subject.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
@@ -45,7 +41,6 @@ public class SubjectService {
 
     public List<SubjectResponse> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-
         return this.subjectRepository.findAllByUserId(user.getId()).stream().map(SubjectResponse::new).toList();
     }
 
@@ -65,13 +60,9 @@ public class SubjectService {
         return new SubjectResponse(createdSubject);
     }
 
-    public SubjectResponse update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public SubjectResponse update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        Subject subject = this.subjectRepository.findById(id).orElse(null);
-
-        if (subject == null) {
-            throw new SubjectNotFoundException("Subject not found.");
-        }
+        Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
         if (!subject.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
@@ -83,13 +74,9 @@ public class SubjectService {
         return new SubjectResponse(this.subjectRepository.save(subject));
     }
 
-    public SubjectResponse updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public SubjectResponse updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        Subject subject = this.subjectRepository.findById(id).orElse(null);
-
-        if (subject == null) {
-            throw new SubjectNotFoundException("Subject not found.");
-        }
+        Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
         if (!subject.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");

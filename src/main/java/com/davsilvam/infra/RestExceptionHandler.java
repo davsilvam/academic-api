@@ -1,6 +1,7 @@
 package com.davsilvam.infra;
 
 
+import com.davsilvam.exceptions.grade.GradeNotFoundException;
 import com.davsilvam.exceptions.professor.ProfessorNotFoundException;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
@@ -36,6 +37,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @NotNull
     @ExceptionHandler(ProfessorNotFoundException.class)
     private ResponseEntity<String> professorNotFoundHandler(@NotNull ProfessorNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @NotNull
+    @ExceptionHandler(GradeNotFoundException.class)
+    private ResponseEntity<String> gradeNotFoundHandler(@NotNull GradeNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 

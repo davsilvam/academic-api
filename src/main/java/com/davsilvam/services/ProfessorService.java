@@ -28,11 +28,7 @@ public class ProfessorService {
     public ProfessorResponse get(UUID id, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
-        Professor professor = this.professorRepository.findById(id).orElse(null);
-
-        if (professor == null) {
-            throw new ProfessorNotFoundException("Professor not found.");
-        }
+        Professor professor = this.professorRepository.findById(id).orElseThrow(() -> new ProfessorNotFoundException("Professor not found."));
 
         if (!professor.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
@@ -43,7 +39,6 @@ public class ProfessorService {
 
     public List<ProfessorResponse> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-
         return this.professorRepository.findAllByUserId(user.getId()).stream().map(ProfessorResponse::new).toList();
     }
 
@@ -56,13 +51,9 @@ public class ProfessorService {
         return new ProfessorResponse(createdProfessor);
     }
 
-    public ProfessorResponse update(UUID id, @NotNull UpdateProfessorRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public ProfessorResponse update(UUID id, @NotNull UpdateProfessorRequest request, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        Professor professor = this.professorRepository.findById(id).orElse(null);
-
-        if (professor == null) {
-            throw new ProfessorNotFoundException("Professor not found.");
-        }
+        Professor professor = this.professorRepository.findById(id).orElseThrow(() -> new ProfessorNotFoundException("Professor not found."));
 
         if (!professor.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
@@ -74,13 +65,9 @@ public class ProfessorService {
         return new ProfessorResponse(this.professorRepository.save(professor));
     }
 
-    public void delete(UUID id, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public void delete(UUID id, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        Professor professor = this.professorRepository.findById(id).orElse(null);
-
-        if (professor == null) {
-            throw new ProfessorNotFoundException("Professor not found.");
-        }
+        Professor professor = this.professorRepository.findById(id).orElseThrow(() -> new ProfessorNotFoundException("Professor not found."));
 
         if (!professor.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
