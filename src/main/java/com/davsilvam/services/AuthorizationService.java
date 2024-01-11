@@ -7,7 +7,7 @@ import com.davsilvam.dtos.authentication.RegisterRequest;
 import com.davsilvam.dtos.authentication.RegisterResponse;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
 import com.davsilvam.infra.security.TokenService;
-import com.davsilvam.repositories.UserRepository;
+import com.davsilvam.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
