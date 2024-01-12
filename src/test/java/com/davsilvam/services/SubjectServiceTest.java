@@ -4,6 +4,7 @@ import com.davsilvam.domain.Professor;
 import com.davsilvam.domain.Subject;
 import com.davsilvam.domain.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
+import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
 import com.davsilvam.exceptions.user.UserUnauthorizedException;
@@ -287,6 +288,81 @@ class SubjectServiceTest {
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.empty(), Optional.of("New Subject Description"));
 
         assertThrows(UserUnauthorizedException.class, () -> subjectService.update(subjectId, mockRequest, userDetails));
+        verify(userDetails, times(1)).getUsername();
+        verify(userRepository, times(1)).findByEmail(unauthorizedMockUser.getEmail());
+        verify(subjectRepository, times(1)).findById(subjectId);
+    }
+
+    @Test
+    @DisplayName("should be able to update the professors of a subject")
+    void updateProfessorsCase1() {
+        when(userDetails.getUsername()).thenReturn(mockUser.getEmail());
+        when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
+
+        UUID subjectId = UUID.randomUUID();
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
+
+        when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
+
+        List<UUID> professorsIds = List.of(UUID.randomUUID(), UUID.randomUUID());
+        List<Professor> mockProfessors = List.of(new Professor("Professor 1", "professor@test.com", mockUser), new Professor("Professor 2", "professor2@test.com", mockUser));
+
+        when(professorRepository.findAllById(professorsIds)).thenReturn(mockProfessors);
+
+        UpdateSubjectProfessorsRequest mockRequest = new UpdateSubjectProfessorsRequest(professorsIds);
+        Subject updatedMockSubject = new Subject(subjectId, mockSubject.getName(), mockSubject.getDescription(), mockUser, mockProfessors);
+
+        when(subjectRepository.save(mockSubject)).thenReturn(updatedMockSubject);
+
+        Subject result = subjectService.updateProfessors(subjectId, mockRequest, userDetails);
+
+        assertNotNull(result);
+        assertEquals(updatedMockSubject, result);
+        verify(userDetails, times(1)).getUsername();
+        verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
+        verify(subjectRepository, times(1)).findById(subjectId);
+        verify(professorRepository, times(1)).findAllById(professorsIds);
+        verify(subjectRepository, times(1)).save(mockSubject);
+    }
+
+    @Test
+    @DisplayName("should be not able to update the professors of a nonexistent subject")
+    void updateProfessorsCase2() {
+        when(userDetails.getUsername()).thenReturn(mockUser.getEmail());
+        when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
+
+        UUID nonExistingSubjectId = UUID.randomUUID();
+
+        when(subjectRepository.findById(nonExistingSubjectId)).thenReturn(Optional.empty());
+
+        List<UUID> professorsIds = List.of(UUID.randomUUID(), UUID.randomUUID());
+
+        UpdateSubjectProfessorsRequest mockRequest = new UpdateSubjectProfessorsRequest(professorsIds);
+
+        assertThrows(SubjectNotFoundException.class, () -> subjectService.updateProfessors(nonExistingSubjectId, mockRequest, userDetails));
+        verify(userDetails, times(1)).getUsername();
+        verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
+        verify(subjectRepository, times(1)).findById(nonExistingSubjectId);
+    }
+
+    @Test
+    @DisplayName("should be not able to update the professors of a subject from another user")
+    void updateProfessorsCase3() {
+        User unauthorizedMockUser = new User(UUID.randomUUID(), "Unauthorized User", "unauthorized@email.com", "password");
+
+        when(userDetails.getUsername()).thenReturn(unauthorizedMockUser.getEmail());
+        when(userRepository.findByEmail(unauthorizedMockUser.getEmail())).thenReturn(unauthorizedMockUser);
+
+        UUID subjectId = UUID.randomUUID();
+
+        Subject mockSubject = new Subject(subjectId, "Subject 1", "Description 1", mockUser, new ArrayList<>());
+        when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
+
+        List<UUID> professorsIds = List.of(UUID.randomUUID(), UUID.randomUUID());
+
+        UpdateSubjectProfessorsRequest mockRequest = new UpdateSubjectProfessorsRequest(professorsIds);
+
+        assertThrows(UserUnauthorizedException.class, () -> subjectService.updateProfessors(subjectId, mockRequest, userDetails));
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(unauthorizedMockUser.getEmail());
         verify(subjectRepository, times(1)).findById(subjectId);
