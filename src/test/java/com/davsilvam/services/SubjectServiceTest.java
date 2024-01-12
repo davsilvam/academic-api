@@ -65,14 +65,13 @@ class SubjectServiceTest {
 
         UUID subjectId = UUID.randomUUID();
         Subject mockSubject = new Subject("Test Subject", "Description", mockUser);
-        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(mockSubject));
 
-        SubjectResponse result = subjectService.get(subjectId, userDetails);
+        Subject result = subjectService.get(subjectId, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(mockSubject, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, times(1)).findById(subjectId);
@@ -117,14 +116,13 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         List<Subject> mockSubjects = Arrays.asList(new Subject("Subject 1", "Description 1", mockUser), new Subject("Subject 2", "Description 2", mockUser));
-        List<SubjectResponse> mockResponses = Arrays.asList(new SubjectResponse(mockSubjects.get(0)), new SubjectResponse(mockSubjects.get(1)));
 
         when(subjectRepository.findAllByUserId(mockUser.getId())).thenReturn(mockSubjects);
 
-        List<SubjectResponse> result = subjectService.fetch(userDetails);
+        List<Subject> result = subjectService.fetch(userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponses, result);
+        assertEquals(mockSubjects, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, times(1)).findAllByUserId(mockUser.getId());
@@ -137,14 +135,13 @@ class SubjectServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         List<Subject> mockSubjects = new ArrayList<>();
-        List<SubjectResponse> mockResponses = new ArrayList<>();
 
         when(subjectRepository.findAllByUserId(mockUser.getId())).thenReturn(mockSubjects);
 
-        List<SubjectResponse> result = subjectService.fetch(userDetails);
+        List<Subject> result = subjectService.fetch(userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponses, result);
+        assertEquals(mockSubjects, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, times(1)).findAllByUserId(mockUser.getId());
@@ -163,16 +160,15 @@ class SubjectServiceTest {
 
         Subject mockSubject = new Subject("Subject 1", "Description 1", mockUser);
         mockSubject.setProfessors(mockProfessors);
-        SubjectResponse mockResponse = new SubjectResponse(mockSubject);
 
         when(subjectRepository.save(any(Subject.class))).thenReturn(mockSubject);
 
         CreateSubjectRequest mockRequest = new CreateSubjectRequest("Subject 1", "Description 1", professorsIds);
 
-        SubjectResponse result = subjectService.create(mockRequest, userDetails);
+        Subject result = subjectService.create(mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(mockSubject, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findAllById(professorsIds);
@@ -192,14 +188,13 @@ class SubjectServiceTest {
 
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.of("New Subject Name"), Optional.of("New Subject Description"));
         Subject updatedMockSubject = new Subject(subjectId, "New Subject Name", "New Subject Description", mockUser, new ArrayList<>());
-        SubjectResponse mockResponse = new SubjectResponse(updatedMockSubject);
 
         when(subjectRepository.save(mockSubject)).thenReturn(updatedMockSubject);
 
-        SubjectResponse result = subjectService.update(subjectId, mockRequest, userDetails);
+        Subject result = subjectService.update(subjectId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(updatedMockSubject, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, times(1)).findById(subjectId);
@@ -219,14 +214,13 @@ class SubjectServiceTest {
 
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.of("New Subject Name"), Optional.empty());
         Subject updatedMockSubject = new Subject(subjectId, "New Subject Name", mockSubject.getDescription(), mockUser, new ArrayList<>());
-        SubjectResponse mockResponse = new SubjectResponse(updatedMockSubject);
 
         when(subjectRepository.save(mockSubject)).thenReturn(updatedMockSubject);
 
-        SubjectResponse result = subjectService.update(subjectId, mockRequest, userDetails);
+        Subject result = subjectService.update(subjectId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(updatedMockSubject, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, times(1)).findById(subjectId);
@@ -246,14 +240,13 @@ class SubjectServiceTest {
 
         UpdateSubjectRequest mockRequest = new UpdateSubjectRequest(Optional.empty(), Optional.of("New Subject Description"));
         Subject updatedMockSubject = new Subject(subjectId, mockSubject.getName(), "New Subject Description", mockUser, new ArrayList<>());
-        SubjectResponse mockResponse = new SubjectResponse(updatedMockSubject);
 
         when(subjectRepository.save(mockSubject)).thenReturn(updatedMockSubject);
 
-        SubjectResponse result = subjectService.update(subjectId, mockRequest, userDetails);
+        Subject result = subjectService.update(subjectId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(updatedMockSubject, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(subjectRepository, times(1)).findById(subjectId);

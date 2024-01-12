@@ -62,14 +62,13 @@ class ProfessorServiceTest {
 
         UUID subjectId = UUID.randomUUID();
         Professor mockProfessor = new Professor("Test Professor", "professor@example.com", mockUser);
-        ProfessorResponse mockResponse = new ProfessorResponse(mockProfessor);
 
         when(professorRepository.findById(subjectId)).thenReturn(Optional.of(mockProfessor));
 
-        ProfessorResponse result = professorService.get(subjectId, userDetails);
+        Professor result = professorService.get(subjectId, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(mockProfessor, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findById(subjectId);
@@ -117,14 +116,13 @@ class ProfessorServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         List<Professor> mockProfessors = Arrays.asList(new Professor("Test Professor 1", "professor@example.com", mockUser), new Professor("Test Professor 2", "professor2@example.com", mockUser));
-        List<ProfessorResponse> mockResponses = Arrays.asList(new ProfessorResponse(mockProfessors.get(0)), new ProfessorResponse(mockProfessors.get(1)));
 
         when(professorRepository.findAllByUserId(mockUser.getId())).thenReturn(mockProfessors);
 
-        List<ProfessorResponse> result = professorService.fetch(userDetails);
+        List<Professor> result = professorService.fetch(userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponses, result);
+        assertEquals(mockProfessors, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findAllByUserId(mockUser.getId());
@@ -137,14 +135,13 @@ class ProfessorServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         List<Professor> mockProfessors = List.of();
-        List<ProfessorResponse> mockResponses = List.of();
 
         when(professorRepository.findAllByUserId(mockUser.getId())).thenReturn(mockProfessors);
 
-        List<ProfessorResponse> result = professorService.fetch(userDetails);
+        List<Professor> result = professorService.fetch(userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponses, result);
+        assertEquals(mockProfessors, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findAllByUserId(mockUser.getId());
@@ -157,16 +154,15 @@ class ProfessorServiceTest {
         when(userRepository.findByEmail(mockUser.getEmail())).thenReturn(mockUser);
 
         Professor mockProfessor = new Professor("Test Professor", "professor@example.com", mockUser);
-        ProfessorResponse mockResponse = new ProfessorResponse(mockProfessor);
 
         when(professorRepository.save(any(Professor.class))).thenReturn(mockProfessor);
 
         CreateProfessorRequest mockRequest = new CreateProfessorRequest(mockProfessor.getName(), mockProfessor.getEmail());
 
-        ProfessorResponse result = professorService.create(mockRequest, userDetails);
+        Professor result = professorService.create(mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(mockProfessor, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).save(any(Professor.class));
@@ -185,14 +181,13 @@ class ProfessorServiceTest {
 
         UpdateProfessorRequest mockRequest = new UpdateProfessorRequest(Optional.of("Test Professor 2"), Optional.of("professor@newemail.com"));
         Professor updatedMockProfessor = new Professor(professorId, "Test Professor 2", "professor@newemail.com", mockUser);
-        ProfessorResponse mockResponse = new ProfessorResponse(updatedMockProfessor);
 
         when(professorRepository.save(mockProfessor)).thenReturn(updatedMockProfessor);
 
-        ProfessorResponse result = professorService.update(professorId, mockRequest, userDetails);
+        Professor result = professorService.update(professorId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(updatedMockProfessor, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findById(professorId);
@@ -212,14 +207,13 @@ class ProfessorServiceTest {
 
         UpdateProfessorRequest mockRequest = new UpdateProfessorRequest(Optional.of("Test Professor 2"), Optional.empty());
         Professor updatedMockProfessor = new Professor(professorId, "Test Professor 2", "professor@example.com", mockUser);
-        ProfessorResponse mockResponse = new ProfessorResponse(updatedMockProfessor);
 
         when(professorRepository.save(mockProfessor)).thenReturn(updatedMockProfessor);
 
-        ProfessorResponse result = professorService.update(professorId, mockRequest, userDetails);
+        Professor result = professorService.update(professorId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(updatedMockProfessor, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findById(professorId);
@@ -239,14 +233,13 @@ class ProfessorServiceTest {
 
         UpdateProfessorRequest mockRequest = new UpdateProfessorRequest(Optional.empty(), Optional.of("professor@newemail.com"));
         Professor updatedMockProfessor = new Professor(professorId, "Test Professor", "professor@newemail.com", mockUser);
-        ProfessorResponse mockResponse = new ProfessorResponse(updatedMockProfessor);
 
         when(professorRepository.save(mockProfessor)).thenReturn(updatedMockProfessor);
 
-        ProfessorResponse result = professorService.update(professorId, mockRequest, userDetails);
+        Professor result = professorService.update(professorId, mockRequest, userDetails);
 
         assertNotNull(result);
-        assertEquals(mockResponse, result);
+        assertEquals(updatedMockProfessor, result);
         verify(userDetails, times(1)).getUsername();
         verify(userRepository, times(1)).findByEmail(mockUser.getEmail());
         verify(professorRepository, times(1)).findById(professorId);
