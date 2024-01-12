@@ -1,6 +1,5 @@
 package com.davsilvam.domain;
 
-import com.davsilvam.domain.Subject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
