@@ -69,7 +69,7 @@ public class GradeService {
 
         Grade grade = this.gradeService.findById(id).orElseThrow(() -> new GradeNotFoundException("Grade not found."));
 
-        Subject subject = this.subjectRepository.findById(request.subject_id()).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
+        Subject subject = this.subjectRepository.findById(grade.getSubject().getId()).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
         if (!subject.getUser().getId().equals(user.getId())) {
             throw new UserUnauthorizedException("User not allowed to access this subject.");

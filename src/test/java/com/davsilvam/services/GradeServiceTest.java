@@ -251,7 +251,7 @@ class GradeServiceTest {
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(mockGrade));
         when(gradeRepository.save(any(Grade.class))).thenReturn(mockGrade);
 
-        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.of(10.0f), mockSubject.getId());
+        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.of(10.0f));
 
         Grade result = gradeService.update(gradeId, request, userDetails);
 
@@ -275,7 +275,7 @@ class GradeServiceTest {
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(mockGrade));
         when(gradeRepository.save(any(Grade.class))).thenReturn(mockGrade);
 
-        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.empty(), mockSubject.getId());
+        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.empty());
 
         Grade result = gradeService.update(gradeId, request, userDetails);
 
@@ -299,7 +299,7 @@ class GradeServiceTest {
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(mockGrade));
         when(gradeRepository.save(any(Grade.class))).thenReturn(mockGrade);
 
-        UpdateGradeRequest request = new UpdateGradeRequest(Optional.empty(), Optional.of(10.0f), mockSubject.getId());
+        UpdateGradeRequest request = new UpdateGradeRequest(Optional.empty(), Optional.of(10.0f));
 
         Grade result = gradeService.update(gradeId, request, userDetails);
 
@@ -320,7 +320,7 @@ class GradeServiceTest {
 
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.empty());
 
-        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.of(10.0f), mockSubject.getId());
+        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.of(10.0f));
 
         assertThrows(GradeNotFoundException.class, () -> gradeService.update(gradeId, request, userDetails));
         verify(userDetails, times(1)).getUsername();
@@ -342,7 +342,7 @@ class GradeServiceTest {
 
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(mockGrade));
 
-        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.of(10.0f), mockSubject.getId());
+        UpdateGradeRequest request = new UpdateGradeRequest(Optional.of("Test Grade"), Optional.of(10.0f));
 
         assertThrows(UserUnauthorizedException.class, () -> gradeService.update(gradeId, request, userDetails));
         verify(userDetails, times(1)).getUsername();
