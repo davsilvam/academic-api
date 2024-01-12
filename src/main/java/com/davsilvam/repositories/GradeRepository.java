@@ -1,6 +1,6 @@
-package com.davsilvam.repositories.grade;
+package com.davsilvam.repositories;
 
-import com.davsilvam.domain.grades.Grade;
+import com.davsilvam.domain.Grade;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

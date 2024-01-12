@@ -1,6 +1,6 @@
 package com.davsilvam.infra.security;
 
-import com.davsilvam.repositories.user.UserRepository;
+import com.davsilvam.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

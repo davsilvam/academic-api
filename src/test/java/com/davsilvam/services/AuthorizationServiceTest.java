@@ -1,13 +1,13 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.User;
 import com.davsilvam.dtos.authentication.LoginRequest;
 import com.davsilvam.dtos.authentication.LoginResponse;
 import com.davsilvam.dtos.authentication.RegisterRequest;
 import com.davsilvam.dtos.authentication.RegisterResponse;
 import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
 import com.davsilvam.infra.security.TokenService;
-import com.davsilvam.repositories.user.UserRepository;
+import com.davsilvam.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

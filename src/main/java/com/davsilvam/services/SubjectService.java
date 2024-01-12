@@ -1,17 +1,16 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.professor.Professor;
-import com.davsilvam.domain.subject.Subject;
-import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.Professor;
+import com.davsilvam.domain.Subject;
+import com.davsilvam.domain.User;
 import com.davsilvam.dtos.subject.CreateSubjectRequest;
-import com.davsilvam.dtos.subject.SubjectResponse;
 import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
 import com.davsilvam.dtos.subject.UpdateSubjectRequest;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
 import com.davsilvam.exceptions.user.UserUnauthorizedException;
-import com.davsilvam.repositories.professor.ProfessorRepository;
-import com.davsilvam.repositories.subject.SubjectRepository;
-import com.davsilvam.repositories.user.UserRepository;
+import com.davsilvam.repositories.ProfessorRepository;
+import com.davsilvam.repositories.SubjectRepository;
+import com.davsilvam.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +26,7 @@ public class SubjectService {
     private final UserRepository userRepository;
     private final ProfessorRepository professorRepository;
 
-    public SubjectResponse get(UUID id, @NotNull UserDetails userDetails) {
+    public Subject get(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
@@ -36,15 +35,15 @@ public class SubjectService {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
         }
 
-        return new SubjectResponse(subject);
+        return subject;
     }
 
-    public List<SubjectResponse> fetch(@NotNull UserDetails userDetails) {
+    public List<Subject> fetch(@NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
-        return this.subjectRepository.findAllByUserId(user.getId()).stream().map(SubjectResponse::new).toList();
+        return this.subjectRepository.findAllByUserId(user.getId());
     }
 
-    public SubjectResponse create(@NotNull CreateSubjectRequest request, @NotNull UserDetails userDetails) {
+    public Subject create(@NotNull CreateSubjectRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         List<Professor> professors = this.professorRepository.findAllById(request.professors_ids());
 
@@ -55,12 +54,10 @@ public class SubjectService {
             professors.forEach(professor -> professor.addSubject(subject));
         }
 
-        Subject createdSubject = this.subjectRepository.save(subject);
-
-        return new SubjectResponse(createdSubject);
+        return this.subjectRepository.save(subject);
     }
 
-    public SubjectResponse update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) {
+    public Subject update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -71,10 +68,10 @@ public class SubjectService {
         subject.setName(request.name().orElse(subject.getName()));
         subject.setDescription(request.description().orElse(subject.getDescription()));
 
-        return new SubjectResponse(this.subjectRepository.save(subject));
+        return this.subjectRepository.save(subject);
     }
 
-    public SubjectResponse updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) {
+    public Subject updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -92,7 +89,7 @@ public class SubjectService {
         subject.setProfessors(professors);
         professors.forEach(professor -> professor.addSubject(subject));
 
-        return new SubjectResponse(this.subjectRepository.save(subject));
+        return this.subjectRepository.save(subject);
     }
 
     public void delete(UUID id, @NotNull UserDetails userDetails) {

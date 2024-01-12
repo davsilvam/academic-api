@@ -1,18 +1,17 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.absences.Absence;
-import com.davsilvam.domain.subject.Subject;
-import com.davsilvam.domain.user.User;
-import com.davsilvam.dtos.absence.AbsenceResponse;
+import com.davsilvam.domain.Absence;
+import com.davsilvam.domain.Subject;
+import com.davsilvam.domain.User;
 import com.davsilvam.dtos.absence.CreateAbsenceRequest;
 import com.davsilvam.dtos.absence.UpdateAbsenceRequest;
 import com.davsilvam.exceptions.absence.AbsenceNotFoundException;
 import com.davsilvam.exceptions.absence.InvalidAbsenceDateException;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
 import com.davsilvam.exceptions.user.UserUnauthorizedException;
-import com.davsilvam.repositories.absence.AbsenceRepository;
-import com.davsilvam.repositories.subject.SubjectRepository;
-import com.davsilvam.repositories.user.UserRepository;
+import com.davsilvam.repositories.AbsenceRepository;
+import com.davsilvam.repositories.SubjectRepository;
+import com.davsilvam.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +30,7 @@ public class AbsenceService {
     private final UserRepository userRepository;
     private final SubjectRepository subjectRepository;
 
-    public AbsenceResponse get(UUID id, @NotNull UserDetails userDetails) {
+    public Absence get(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Absence absence = this.absenceRepository.findById(id).orElseThrow(() -> new AbsenceNotFoundException("Absence not found."));
@@ -42,10 +41,10 @@ public class AbsenceService {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
         }
 
-        return new AbsenceResponse(absence);
+        return absence;
     }
 
-    public List<AbsenceResponse> fetch(UUID subjectId, @NotNull UserDetails userDetails) {
+    public List<Absence> fetch(UUID subjectId, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(subjectId).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -53,12 +52,10 @@ public class AbsenceService {
             throw new UserUnauthorizedException("User not allowed to access this subject.");
         }
 
-        List<Absence> absences = this.absenceRepository.findAllBySubjectId(subjectId);
-
-        return absences.stream().map(AbsenceResponse::new).toList();
+        return this.absenceRepository.findAllBySubjectId(subjectId);
     }
 
-    public AbsenceResponse create(@NotNull CreateAbsenceRequest request, @NotNull UserDetails userDetails) {
+    public Absence create(@NotNull CreateAbsenceRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(request.subject_id()).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -78,16 +75,14 @@ public class AbsenceService {
 
             Absence absence = new Absence(date, request.amount(), subject);
 
-            this.absenceRepository.save(absence);
-
-            return new AbsenceResponse(absence);
+            return this.absenceRepository.save(absence);
         } catch (ParseException exception) {
             throw new InvalidAbsenceDateException("Invalid date format, please use dd/MM/yyyy.");
         }
 
     }
 
-    public AbsenceResponse update(UUID id, @NotNull UpdateAbsenceRequest request, @NotNull UserDetails userDetails) {
+    public Absence update(UUID id, @NotNull UpdateAbsenceRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Absence absence = this.absenceRepository.findById(id).orElseThrow(() -> new AbsenceNotFoundException("Absence not found."));
@@ -114,9 +109,8 @@ public class AbsenceService {
 
             absence.setAmount(request.amount().orElse(absence.getAmount()));
 
-            this.absenceRepository.save(absence);
 
-            return new AbsenceResponse(absence);
+            return this.absenceRepository.save(absence);
         } catch (ParseException exception) {
             throw new InvalidAbsenceDateException("Invalid date format, please use dd/MM/yyyy.");
         }

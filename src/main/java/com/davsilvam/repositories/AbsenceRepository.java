@@ -1,6 +1,6 @@
-package com.davsilvam.repositories.absence;
+package com.davsilvam.repositories;
 
-import com.davsilvam.domain.absences.Absence;
+import com.davsilvam.domain.Absence;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

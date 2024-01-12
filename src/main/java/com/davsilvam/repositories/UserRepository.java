@@ -1,6 +1,6 @@
-package com.davsilvam.repositories.user;
+package com.davsilvam.repositories;
 
-import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

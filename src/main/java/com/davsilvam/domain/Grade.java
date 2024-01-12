@@ -1,6 +1,6 @@
-package com.davsilvam.domain.grades;
+package com.davsilvam.domain;
 
-import com.davsilvam.domain.subject.Subject;
+import com.davsilvam.domain.Subject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class Grade {
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    @JsonIgnoreProperties("grades")
+    @JsonIgnoreProperties({"grades", "absences", "professors"})
     private Subject subject;
 
     public Grade(String name, Float value, Subject subject) {

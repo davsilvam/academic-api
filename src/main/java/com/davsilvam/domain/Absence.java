@@ -1,6 +1,6 @@
-package com.davsilvam.domain.absences;
+package com.davsilvam.domain;
 
-import com.davsilvam.domain.subject.Subject;
+import com.davsilvam.domain.Subject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ public class Absence {
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    @JsonIgnoreProperties("absences")
+    @JsonIgnoreProperties({"absences", "grades", "professors"})
     private Subject subject;
 
     public Absence(Date date, Integer amount, Subject subject) {

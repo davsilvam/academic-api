@@ -1,7 +1,7 @@
 package com.davsilvam.controllers;
 
+import com.davsilvam.domain.Grade;
 import com.davsilvam.dtos.grade.CreateGradeRequest;
-import com.davsilvam.dtos.grade.GradeResponse;
 import com.davsilvam.dtos.grade.UpdateGradeRequest;
 import com.davsilvam.services.GradeService;
 import lombok.RequiredArgsConstructor;
@@ -21,26 +21,26 @@ public class GradeController {
     private final GradeService gradeService;
 
     @GetMapping("{id}")
-    public ResponseEntity<GradeResponse> get(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        GradeResponse response = this.gradeService.get(id, userDetails);
+    public ResponseEntity<Grade> get(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails userDetails) {
+        Grade response = this.gradeService.get(id, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("subject/{subjectId}")
-    public ResponseEntity<List<GradeResponse>> fetch(@PathVariable("subjectId") UUID subjectId, @AuthenticationPrincipal UserDetails userDetails) {
-        List<GradeResponse> response = this.gradeService.fetch(subjectId, userDetails);
+    public ResponseEntity<List<Grade>> fetch(@PathVariable("subjectId") UUID subjectId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<Grade> response = this.gradeService.fetch(subjectId, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
-    public ResponseEntity<GradeResponse> create(@RequestBody CreateGradeRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        GradeResponse response = this.gradeService.create(request, userDetails);
+    public ResponseEntity<Grade> create(@RequestBody CreateGradeRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        Grade response = this.gradeService.create(request, userDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<GradeResponse> update(@PathVariable("id") UUID id, @RequestBody UpdateGradeRequest request, @AuthenticationPrincipal UserDetails userDetails) {
-        GradeResponse response = this.gradeService.update(id, request, userDetails);
+    public ResponseEntity<Grade> update(@PathVariable("id") UUID id, @RequestBody UpdateGradeRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        Grade response = this.gradeService.update(id, request, userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
