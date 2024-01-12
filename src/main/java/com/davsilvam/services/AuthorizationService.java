@@ -34,7 +34,7 @@ public class AuthorizationService implements UserDetailsService {
         return this.userRepository.findByEmail(username);
     }
 
-    public RegisterResponse register(@NotNull RegisterRequest request) throws EmailAlreadyUsedException {
+    public RegisterResponse register(@NotNull RegisterRequest request) {
         if (this.userRepository.findByEmail(request.email()) != null) {
             throw new EmailAlreadyUsedException("Email already used!");
         }

@@ -25,7 +25,7 @@ public class ProfessorService {
     private final UserRepository userRepository;
     private final SubjectRepository subjectRepository;
 
-    public ProfessorResponse get(UUID id, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
+    public ProfessorResponse get(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Professor professor = this.professorRepository.findById(id).orElseThrow(() -> new ProfessorNotFoundException("Professor not found."));
@@ -51,7 +51,7 @@ public class ProfessorService {
         return new ProfessorResponse(createdProfessor);
     }
 
-    public ProfessorResponse update(UUID id, @NotNull UpdateProfessorRequest request, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
+    public ProfessorResponse update(UUID id, @NotNull UpdateProfessorRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Professor professor = this.professorRepository.findById(id).orElseThrow(() -> new ProfessorNotFoundException("Professor not found."));
 
@@ -65,7 +65,7 @@ public class ProfessorService {
         return new ProfessorResponse(this.professorRepository.save(professor));
     }
 
-    public void delete(UUID id, @NotNull UserDetails userDetails) throws ProfessorNotFoundException, UserUnauthorizedException {
+    public void delete(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Professor professor = this.professorRepository.findById(id).orElseThrow(() -> new ProfessorNotFoundException("Professor not found."));
 

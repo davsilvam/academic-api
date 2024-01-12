@@ -27,7 +27,7 @@ public class SubjectService {
     private final UserRepository userRepository;
     private final ProfessorRepository professorRepository;
 
-    public SubjectResponse get(UUID id, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
+    public SubjectResponse get(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
@@ -60,7 +60,7 @@ public class SubjectService {
         return new SubjectResponse(createdSubject);
     }
 
-    public SubjectResponse update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
+    public SubjectResponse update(UUID id, @NotNull UpdateSubjectRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -74,7 +74,7 @@ public class SubjectService {
         return new SubjectResponse(this.subjectRepository.save(subject));
     }
 
-    public SubjectResponse updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
+    public SubjectResponse updateProfessors(UUID id, @NotNull UpdateSubjectProfessorsRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -95,7 +95,7 @@ public class SubjectService {
         return new SubjectResponse(this.subjectRepository.save(subject));
     }
 
-    public void delete(UUID id, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public void delete(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(id).orElse(null);
 

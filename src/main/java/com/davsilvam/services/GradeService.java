@@ -27,7 +27,7 @@ public class GradeService {
     private final UserRepository userRepository;
     private final SubjectRepository subjectRepository;
 
-    public GradeResponse get(UUID id, @NotNull UserDetails userDetails) throws GradeNotFoundException, UserUnauthorizedException {
+    public GradeResponse get(UUID id, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Grade grade = this.gradeService.findById(id).orElseThrow(() -> new GradeNotFoundException("Grade not found."));
@@ -41,7 +41,7 @@ public class GradeService {
         return new GradeResponse(grade);
     }
 
-    public List<GradeResponse> fetch(UUID subjectId, @NotNull UserDetails userDetails) throws SubjectNotFoundException, UserUnauthorizedException {
+    public List<GradeResponse> fetch(UUID subjectId, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(subjectId).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
 
@@ -54,9 +54,13 @@ public class GradeService {
         return grades.stream().map(GradeResponse::new).toList();
     }
 
-    public GradeResponse create(@NotNull CreateGradeRequest request, @NotNull UserDetails userDetails) throws SubjectNotFoundException {
+    public GradeResponse create(@NotNull CreateGradeRequest request, @NotNull UserDetails userDetails)  {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
         Subject subject = this.subjectRepository.findById(request.subject_id()).orElseThrow(() -> new SubjectNotFoundException("Subject not found."));
+
+        if (!subject.getUser().getId().equals(user.getId())) {
+            throw new UserUnauthorizedException("User not allowed to access this subject.");
+        }
 
         Grade grade = new Grade(request.name(), request.value(), subject);
 
@@ -65,7 +69,7 @@ public class GradeService {
         return new GradeResponse(createdGrade);
     }
 
-    public GradeResponse update(UUID id, @NotNull UpdateGradeRequest request, @NotNull UserDetails userDetails) throws UserUnauthorizedException, GradeNotFoundException {
+    public GradeResponse update(UUID id, @NotNull UpdateGradeRequest request, @NotNull UserDetails userDetails) {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Grade grade = this.gradeService.findById(id).orElseThrow(() -> new GradeNotFoundException("Grade not found."));
@@ -83,7 +87,7 @@ public class GradeService {
 
     }
 
-    public void delete(UUID id, @NotNull UserDetails userDetails) throws UserUnauthorizedException {
+    public void delete(UUID id, @NotNull UserDetails userDetails)  {
         User user = this.userRepository.findByEmail(userDetails.getUsername());
 
         Grade grade = this.gradeService.findById(id).orElseThrow(() -> new GradeNotFoundException("Grade not found."));
