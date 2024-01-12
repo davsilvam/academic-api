@@ -1,6 +1,8 @@
 package com.davsilvam.infra;
 
 
+import com.davsilvam.exceptions.absence.AbsenceNotFoundException;
+import com.davsilvam.exceptions.absence.InvalidAbsenceDateException;
 import com.davsilvam.exceptions.grade.GradeNotFoundException;
 import com.davsilvam.exceptions.professor.ProfessorNotFoundException;
 import com.davsilvam.exceptions.subject.SubjectNotFoundException;
@@ -44,6 +46,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(GradeNotFoundException.class)
     private ResponseEntity<String> gradeNotFoundHandler(@NotNull GradeNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @NotNull
+    @ExceptionHandler(AbsenceNotFoundException.class)
+    private ResponseEntity<String> absenceNotFoundHandler(@NotNull AbsenceNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @NotNull
+    @ExceptionHandler(InvalidAbsenceDateException.class)
+    private ResponseEntity<String> invalidAbsenceDateHandler(@NotNull InvalidAbsenceDateException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @NotNull

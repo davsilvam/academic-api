@@ -1,5 +1,6 @@
 package com.davsilvam.domain.subject;
 
+import com.davsilvam.domain.absences.Absence;
 import com.davsilvam.domain.grades.Grade;
 import com.davsilvam.domain.professor.Professor;
 import com.davsilvam.domain.user.User;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +43,10 @@ public class Subject {
     @OneToMany(mappedBy = "subject")
     @JsonIgnoreProperties("subject")
     private List<Grade> grades;
+
+    @OneToMany(mappedBy = "subject")
+    @JsonIgnoreProperties("subject")
+    private List<Absence> absences;
 
     public Subject(String name, String description, User user) {
         this.name = name;

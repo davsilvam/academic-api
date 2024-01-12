@@ -30,9 +30,17 @@ CREATE TABLE IF NOT EXISTS subjects_professors (
 );
 
 CREATE TABLE IF NOT EXISTS grades (
-    id UUID PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    value DOUBLE PRECISION NOT NULL,
+    id         UUID PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
+    value      DOUBLE PRECISION NOT NULL,
+    subject_id UUID NOT NULL,
+    FOREIGN KEY (subject_id) REFERENCES subjects (id)
+);
+
+CREATE TABLE IF NOT EXISTS absences (
+    id         UUID PRIMARY KEY,
+    date       DATE NOT NULL,
+    amount     SMALLINT NOT NULL,
     subject_id UUID NOT NULL,
     FOREIGN KEY (subject_id) REFERENCES subjects (id)
 );
