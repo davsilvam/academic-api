@@ -79,7 +79,6 @@ public class AbsenceService {
         } catch (ParseException exception) {
             throw new InvalidAbsenceDateException("Invalid date format, please use dd/MM/yyyy.");
         }
-
     }
 
     public Absence update(UUID id, @NotNull UpdateAbsenceRequest request, @NotNull UserDetails userDetails) {
@@ -108,7 +107,6 @@ public class AbsenceService {
             }
 
             absence.setAmount(request.amount().orElse(absence.getAmount()));
-
 
             return this.absenceRepository.save(absence);
         } catch (ParseException exception) {
