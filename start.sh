@@ -1,7 +1,6 @@
 docker-compose down
 
-chmod +x mvnw
-chmod +x mvnw.cmd
+mvn -N wrapper:wrapper
 
 # build docker image
 docker build -t backend-academic .
