@@ -1,7 +1,5 @@
 docker-compose down
 
-mvn -N wrapper:wrapper
-
 # build docker image
 docker build -t backend-academic .
 
