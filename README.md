@@ -4,11 +4,11 @@
 
 - [x] Deve ser possível se cadastrar.
 - [x] Deve ser possível se autenticar.
-- [ ] Deve ser possível cadastrar seus dados acadêmicos.
-- [ ] Deve ser possível cadastrar suas disciplinas.
-- [ ] Deve ser possível cadastrar suas notas.
-- [ ] Deve ser possível cadastrar suas faltas.
-- [ ] Deve ser possível cadastrar os dados de um professor.
+- [x] Deve ser possível cadastrar seus dados acadêmicos.
+- [x] Deve ser possível cadastrar suas disciplinas.
+- [x] Deve ser possível cadastrar suas notas.
+- [x] Deve ser possível cadastrar suas faltas.
+- [x] Deve ser possível cadastrar os dados de um professor.
 
 ## RN (Regras de Negócio)
 

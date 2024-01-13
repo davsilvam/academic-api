@@ -2,7 +2,7 @@ spring:
   datasource:
     username: admin
     password: 123456
-    url: jdbc:postgresql://localhost:5432/academic
+    url: jdbc:postgresql://localhost:5432/postgres-db
     driver-class-name: org.postgresql.Driver
   sql:
     init:
