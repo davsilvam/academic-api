@@ -1,13 +1,13 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.Professor;
-import com.davsilvam.domain.Subject;
-import com.davsilvam.domain.User;
-import com.davsilvam.dtos.subject.CreateSubjectRequest;
-import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
-import com.davsilvam.dtos.subject.UpdateSubjectRequest;
-import com.davsilvam.exceptions.subject.SubjectNotFoundException;
-import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.domain.professor.Professor;
+import com.davsilvam.domain.subject.Subject;
+import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.subject.dtos.CreateSubjectRequest;
+import com.davsilvam.domain.subject.dtos.UpdateSubjectProfessorsRequest;
+import com.davsilvam.domain.subject.dtos.UpdateSubjectRequest;
+import com.davsilvam.domain.subject.exceptions.SubjectNotFoundException;
+import com.davsilvam.domain.user.exceptions.UserUnauthorizedException;
 import com.davsilvam.repositories.ProfessorRepository;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;

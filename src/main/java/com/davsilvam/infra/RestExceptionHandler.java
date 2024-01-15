@@ -1,13 +1,13 @@
 package com.davsilvam.infra;
 
 
-import com.davsilvam.exceptions.absence.AbsenceNotFoundException;
-import com.davsilvam.exceptions.absence.InvalidAbsenceDateException;
-import com.davsilvam.exceptions.grade.GradeNotFoundException;
-import com.davsilvam.exceptions.professor.ProfessorNotFoundException;
-import com.davsilvam.exceptions.subject.SubjectNotFoundException;
-import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
-import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.domain.absence.exceptions.AbsenceNotFoundException;
+import com.davsilvam.domain.absence.exceptions.InvalidAbsenceDateException;
+import com.davsilvam.domain.grade.exceptions.GradeNotFoundException;
+import com.davsilvam.domain.professor.exceptions.ProfessorNotFoundException;
+import com.davsilvam.domain.subject.exceptions.SubjectNotFoundException;
+import com.davsilvam.domain.user.exceptions.EmailAlreadyUsedException;
+import com.davsilvam.domain.user.exceptions.UserUnauthorizedException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

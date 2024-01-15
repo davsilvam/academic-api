@@ -1,13 +1,13 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.Grade;
-import com.davsilvam.domain.Subject;
-import com.davsilvam.domain.User;
-import com.davsilvam.dtos.grade.CreateGradeRequest;
-import com.davsilvam.dtos.grade.UpdateGradeRequest;
-import com.davsilvam.exceptions.grade.GradeNotFoundException;
-import com.davsilvam.exceptions.subject.SubjectNotFoundException;
-import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.domain.grade.Grade;
+import com.davsilvam.domain.subject.Subject;
+import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.grade.dtos.CreateGradeRequest;
+import com.davsilvam.domain.grade.dtos.UpdateGradeRequest;
+import com.davsilvam.domain.grade.exceptions.GradeNotFoundException;
+import com.davsilvam.domain.subject.exceptions.SubjectNotFoundException;
+import com.davsilvam.domain.user.exceptions.UserUnauthorizedException;
 import com.davsilvam.repositories.GradeRepository;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;

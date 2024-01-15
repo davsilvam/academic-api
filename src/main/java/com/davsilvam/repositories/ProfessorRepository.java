@@ -1,6 +1,6 @@
 package com.davsilvam.repositories;
 
-import com.davsilvam.domain.Professor;
+import com.davsilvam.domain.professor.Professor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

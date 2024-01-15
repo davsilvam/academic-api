@@ -1,8 +1,8 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.Absence;
-import com.davsilvam.dtos.absence.CreateAbsenceRequest;
-import com.davsilvam.dtos.absence.UpdateAbsenceRequest;
+import com.davsilvam.domain.absence.Absence;
+import com.davsilvam.domain.absence.dtos.CreateAbsenceRequest;
+import com.davsilvam.domain.absence.dtos.UpdateAbsenceRequest;
 import com.davsilvam.services.AbsenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

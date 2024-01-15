@@ -1,9 +1,9 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.dtos.authentication.LoginRequest;
-import com.davsilvam.dtos.authentication.LoginResponse;
-import com.davsilvam.dtos.authentication.RegisterRequest;
-import com.davsilvam.dtos.authentication.RegisterResponse;
+import com.davsilvam.domain.user.dtos.LoginRequest;
+import com.davsilvam.domain.user.dtos.LoginResponse;
+import com.davsilvam.domain.user.dtos.RegisterRequest;
+import com.davsilvam.domain.user.dtos.RegisterResponse;
 import com.davsilvam.services.AuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;

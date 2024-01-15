@@ -1,9 +1,9 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.Subject;
-import com.davsilvam.dtos.subject.CreateSubjectRequest;
-import com.davsilvam.dtos.subject.UpdateSubjectProfessorsRequest;
-import com.davsilvam.dtos.subject.UpdateSubjectRequest;
+import com.davsilvam.domain.subject.Subject;
+import com.davsilvam.domain.subject.dtos.CreateSubjectRequest;
+import com.davsilvam.domain.subject.dtos.UpdateSubjectProfessorsRequest;
+import com.davsilvam.domain.subject.dtos.UpdateSubjectRequest;
 import com.davsilvam.services.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

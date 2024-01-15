@@ -1,14 +1,14 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.Absence;
-import com.davsilvam.domain.Subject;
-import com.davsilvam.domain.User;
-import com.davsilvam.dtos.absence.CreateAbsenceRequest;
-import com.davsilvam.dtos.absence.UpdateAbsenceRequest;
-import com.davsilvam.exceptions.absence.AbsenceNotFoundException;
-import com.davsilvam.exceptions.absence.InvalidAbsenceDateException;
-import com.davsilvam.exceptions.subject.SubjectNotFoundException;
-import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.domain.absence.Absence;
+import com.davsilvam.domain.subject.Subject;
+import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.absence.dtos.CreateAbsenceRequest;
+import com.davsilvam.domain.absence.dtos.UpdateAbsenceRequest;
+import com.davsilvam.domain.absence.exceptions.AbsenceNotFoundException;
+import com.davsilvam.domain.absence.exceptions.InvalidAbsenceDateException;
+import com.davsilvam.domain.subject.exceptions.SubjectNotFoundException;
+import com.davsilvam.domain.user.exceptions.UserUnauthorizedException;
 import com.davsilvam.repositories.AbsenceRepository;
 import com.davsilvam.repositories.SubjectRepository;
 import com.davsilvam.repositories.UserRepository;
@@ -27,6 +27,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("Absence Service Tests")
 class AbsenceServiceTest {
     @Mock
     UserRepository userRepository;

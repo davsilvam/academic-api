@@ -1,11 +1,11 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.Professor;
-import com.davsilvam.domain.User;
-import com.davsilvam.dtos.professor.CreateProfessorRequest;
-import com.davsilvam.dtos.professor.UpdateProfessorRequest;
-import com.davsilvam.exceptions.professor.ProfessorNotFoundException;
-import com.davsilvam.exceptions.user.UserUnauthorizedException;
+import com.davsilvam.domain.professor.Professor;
+import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.professor.dtos.CreateProfessorRequest;
+import com.davsilvam.domain.professor.dtos.UpdateProfessorRequest;
+import com.davsilvam.domain.professor.exceptions.ProfessorNotFoundException;
+import com.davsilvam.domain.user.exceptions.UserUnauthorizedException;
 import com.davsilvam.repositories.ProfessorRepository;
 import com.davsilvam.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;

@@ -1,11 +1,11 @@
 package com.davsilvam.services;
 
-import com.davsilvam.domain.User;
-import com.davsilvam.dtos.authentication.LoginRequest;
-import com.davsilvam.dtos.authentication.LoginResponse;
-import com.davsilvam.dtos.authentication.RegisterRequest;
-import com.davsilvam.dtos.authentication.RegisterResponse;
-import com.davsilvam.exceptions.user.EmailAlreadyUsedException;
+import com.davsilvam.domain.user.User;
+import com.davsilvam.domain.user.dtos.LoginRequest;
+import com.davsilvam.domain.user.dtos.LoginResponse;
+import com.davsilvam.domain.user.dtos.RegisterRequest;
+import com.davsilvam.domain.user.dtos.RegisterResponse;
+import com.davsilvam.domain.user.exceptions.EmailAlreadyUsedException;
 import com.davsilvam.infra.security.TokenService;
 import com.davsilvam.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;

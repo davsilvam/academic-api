@@ -1,8 +1,8 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.Grade;
-import com.davsilvam.dtos.grade.CreateGradeRequest;
-import com.davsilvam.dtos.grade.UpdateGradeRequest;
+import com.davsilvam.domain.grade.Grade;
+import com.davsilvam.domain.grade.dtos.CreateGradeRequest;
+import com.davsilvam.domain.grade.dtos.UpdateGradeRequest;
 import com.davsilvam.services.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

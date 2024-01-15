@@ -1,8 +1,8 @@
 package com.davsilvam.controllers;
 
-import com.davsilvam.domain.Professor;
-import com.davsilvam.dtos.professor.CreateProfessorRequest;
-import com.davsilvam.dtos.professor.UpdateProfessorRequest;
+import com.davsilvam.domain.professor.Professor;
+import com.davsilvam.domain.professor.dtos.CreateProfessorRequest;
+import com.davsilvam.domain.professor.dtos.UpdateProfessorRequest;
 import com.davsilvam.services.ProfessorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
